@@ -1,1 +1,1 @@
-# noted
+# <img src="./public/noted.svg" width=24> Noted
