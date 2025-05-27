@@ -2,8 +2,9 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-ro
 import NavBar from "./components/NavBar";
 import HeroSection from "./components/landingPage/HeroSection";
 import Home from "./components/notes/Home";
-import OpenNote from "./components/notes/OpenNote";
+import NoteEditor from "./components/notes/NoteEditor";
 import CreateNotePage from "./components/notes/CreateNotePage";
+import { NoteEditor } from "./components/notes/NoteEditor";
 
 // Placeholder components for other routes (you'll build these out)
 const SettingsPage = () => (
@@ -50,7 +51,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HeroSection />} />
               <Route path="/user" element={<Home />} />
-              <Route path="/user/note/:noteId" element={<OpenNote />} />
+              <Route path="/user/note/:noteId" element={<NoteEditor />} />
               <Route path="/create" element={<CreateNotePage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/auth" element={<AuthPage />} />

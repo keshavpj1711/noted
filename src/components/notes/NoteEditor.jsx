@@ -1,4 +1,3 @@
-// src/components/notes/OpenNote.jsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { dummyNotes } from '../../data/notes';
@@ -166,10 +165,4 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
     </div>
   );
 }
-// Keep OpenNote as a wrapper for now, passing the noteId
-function OpenNote() {
-    return <NoteEditor />;
-}
-export default OpenNote; // This will be used for /user/note/:noteId
-// We'll also export NoteEditor directly for the create page
-export { NoteEditor };
+export default NoteEditor; 
