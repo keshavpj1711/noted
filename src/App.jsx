@@ -1,6 +1,7 @@
 import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-router-dom";
 import NavBar from "./components/NavBar";
 import HeroSection from "./components/landingPage/HeroSection";
+import Home from "./components/notes/Home";
 
 // Placeholder components for other routes (you'll build these out)
 const CreateNotePage = () => (
@@ -51,13 +52,11 @@ function App() {
           </div>
           <main className="flex-grow"> {/* Ensures footer (if any) stays at bottom */}
             <Routes>
-              <Route path="/user" element={<HeroSection />} />
+              <Route path="/" element={<HeroSection />} />
+              <Route path="/user" element={<Home />} />
               <Route path="/create" element={<CreateNotePage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/auth" element={<AuthPage />} />
-              {/* Default redirect to /user */}
-              <Route path="/" element={<Navigate to="/user" replace />} />
-              <Route path="*" element={<Navigate to="/user" replace />} /> {/* Catch-all */}
             </Routes>
           </main>
         </div>
