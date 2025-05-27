@@ -24,7 +24,7 @@ function Home() {
             />
             <button
               type="button"
-              className="ml-2 bg-green-400 hover:bg-green-700 text-white font-semibold py-2 px-5 rounded-md transition-colors"
+              className="ml-2 bg-green-700 hover:bg-green-600 text-white font-semibold py-2 px-5 rounded-md transition-colors"
             >
               Search
             </button>

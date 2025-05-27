@@ -64,7 +64,7 @@ function App() {
         {/* Floating Create Note Icon - also needs to be on top */}
         <Link
           to="/create"
-          className="fixed bottom-8 right-8 bg-green-600 hover:bg-green-700 
+          className="fixed bottom-8 right-8 bg-green-800
                      text-white rounded-full p-3 md:p-2 shadow-2xl 
                      flex items-center justify-center z-20
                      transition-transform hover:scale-110"
