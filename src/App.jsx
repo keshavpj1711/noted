@@ -2,14 +2,10 @@ import { BrowserRouter as Router, Routes, Route, Navigate, Link } from "react-ro
 import NavBar from "./components/NavBar";
 import HeroSection from "./components/landingPage/HeroSection";
 import Home from "./components/notes/Home";
+import OpenNote from "./components/notes/OpenNote";
+import CreateNotePage from "./components/notes/CreateNotePage";
 
 // Placeholder components for other routes (you'll build these out)
-const CreateNotePage = () => (
-  <div className="flex items-center justify-center h-[calc(100vh-80px)] text-white text-2xl">
-    {/* Adjusted height to account for NavBar */}
-    Create Note Page Content
-  </div>
-);
 const SettingsPage = () => (
   <div className="flex items-center justify-center h-[calc(100vh-80px)] text-white text-2xl">
     Settings Page Content
@@ -54,6 +50,7 @@ function App() {
             <Routes>
               <Route path="/" element={<HeroSection />} />
               <Route path="/user" element={<Home />} />
+              <Route path="/user/note/:noteId" element={<OpenNote />} />
               <Route path="/create" element={<CreateNotePage />} />
               <Route path="/settings" element={<SettingsPage />} />
               <Route path="/auth" element={<AuthPage />} />
