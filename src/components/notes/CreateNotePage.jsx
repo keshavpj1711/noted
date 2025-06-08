@@ -1,5 +1,5 @@
 // src/components/notes/CreateNotePage.jsx
-import { NoteEditor } from './NoteEditor'; // Import the refactored NoteEditor
+import NoteEditor from "./NoteEditor";
 
 function CreateNotePage() {
   return <NoteEditor isCreating={true} />;

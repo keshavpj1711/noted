@@ -4,7 +4,8 @@ import HeroSection from "./components/landingPage/HeroSection";
 import Home from "./components/notes/Home";
 import NoteEditor from "./components/notes/NoteEditor";
 import CreateNotePage from "./components/notes/CreateNotePage";
-import { NoteEditor } from "./components/notes/NoteEditor";
+// import { NoteEditor } from "./components/notes/NoteEditor";
+import AuthPage from "./components/auth/Auth"
 
 // Placeholder components for other routes (you'll build these out)
 const SettingsPage = () => (
@@ -12,11 +13,7 @@ const SettingsPage = () => (
     Settings Page Content
   </div>
 );
-const AuthPage = () => (
-  <div className="flex items-center justify-center h-[calc(100vh-80px)] text-white text-2xl">
-    Authentication Page (Login/Signup)
-  </div>
-);
+
 
 function App() {
   return (

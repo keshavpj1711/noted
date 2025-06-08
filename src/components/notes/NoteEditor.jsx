@@ -100,7 +100,7 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
                 type="text"
                 value={title}
                 onChange={(e) => setTitle(e.target.value)}
-                className="w-full bg-transparent text-2xl md:text-3xl font-semibold text-white focus:outline-none focus:border-b-2 focus:border-green-500 pb-1"
+                className="w-full bg-transparent text-2xl md:text-3xl font-semibold text-white focus:outline-none focus:border-b-2 focus:border-green-700 pb-1"
                 placeholder="Note Title"
               />
             ) : (

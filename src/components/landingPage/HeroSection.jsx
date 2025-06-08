@@ -30,16 +30,16 @@ function HeroSection() {
           <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Link
               to="/create"
-              className="w-full sm:w-auto px-8 py-3 rounded-lg bg-green-400 text-white font-semibold 
-                       hover:bg-green-800 transition-transform hover:scale-105 duration-200
+              className="w-full sm:w-auto px-8 py-3 rounded-lg bg-green-900 text-white font-semibold 
+                       hover:bg-green-700 transition-transform hover:scale-105 duration-200
                        focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 text-center"
             >
               Create Note
             </Link>
             <Link
               to="/auth" // Assuming Sign Up leads to the auth page
-              className="w-full sm:w-auto px-8 py-3 rounded-lg border-2 border-gray-400 text-gray-200 
-                       hover:bg-gray-700/70 hover:border-gray-300 hover:text-white 
+              className="w-full sm:w-auto px-8 py-3 rounded-lg border-2 border-gray-600 text-gray-200 
+                       hover:bg-green-700/20 hover:border-gray-400 hover:text-white 
                        transition-all duration-200 text-center"
             >
               Sign Up

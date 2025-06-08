@@ -37,8 +37,8 @@ function NavBar() {
       <div className="flex items-center">
         <Link
           to="/auth"
-          className="px-5 py-2.5 rounded-lg bg-green-700 text-xm text-white font-semibold 
-                     hover:bg-green-600 transition-transform hover:scale-105 duration-200
+          className="px-5 py-2.5 rounded-lg bg-green-900 text-xm text-white font-semibold 
+                     hover:bg-green-700 transition-transform hover:scale-105 duration-200
                      focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
         >
           Log In
