@@ -1,5 +1,7 @@
 // src/components/auth/Auth.jsx
 import { useState } from 'react';
+import bgVector from '../../assets/bg_vector.png';
+
 
 function Auth() {
   const [isLogin, setIsLogin] = useState(true);
@@ -41,24 +43,22 @@ function Auth() {
 
   return (
     <div 
-      className="min-h-screen flex items-center justify-center relative overflow-hidden"
+      className="min-h-screen flex items-center justify-center relative 
+      overflow-hidden bg-[length:40%_auto] bg-center bg-no-repeat"
       style={{
-        backgroundImage: `url('/path-to-your-network-background-image.jpg')`, // Replace with your image path
-        backgroundSize: 'cover',
-        backgroundPosition: 'center',
-        backgroundRepeat: 'no-repeat'
+        backgroundImage: `url(${bgVector})`, // Replace with your image path
       }}
     >
       <div
           aria-hidden="true"
           className="absolute top-0  w-[300px] h-[300px] md:w-[600px] md:h-[600px] 
-                     bg-green-600/20 rounded-full 
+                     bg-green-500/40 rounded-full 
                      filter blur-[150px] md:blur-[200px] 
                      opacity-80 translate-x-1 translate-y-1/3 
                      pointer-events-none z-0"
       ></div>
       {/* Dark overlay to ensure form visibility */}
-      <div className="absolute inset-0 z-0"></div>
+      <div className="absolute inset-0 bg-black/50 z-0"></div>
 
       {/* Auth Form Container - FIXED HEIGHT */}
       <div className="relative z-10 w-full max-w-sm mx-4">
