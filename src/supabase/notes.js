@@ -1,13 +1,14 @@
 // src/supabase/notes.js
 import { supabase } from './supabase';
 
-// Fetch all notes for the current user
+// Fetch all notes for the current user (updated to handle pinned notes)
 export const fetchUserNotes = async () => {
   const { data, error } = await supabase
     .from('notes')
     .select('*')
     .eq('is_archived', false)
-    .order('updated_at', { ascending: false });
+    .order('is_pinned', { ascending: false }) // Pinned notes first
+    .order('updated_at', { ascending: false }); // Then by most recent
 
   if (error) {
     console.error('Error fetching notes:', error);
@@ -95,4 +96,24 @@ export const deleteNote = async (noteId) => {
   }
 
   return { error: null };
+};
+
+// Toggle pin status of a note
+export const togglePinNote = async (noteId, isPinned) => {
+  const { data, error } = await supabase
+    .from('notes')
+    .update({
+      is_pinned: !isPinned,
+      updated_at: new Date().toISOString(),
+    })
+    .eq('id', noteId)
+    .select()
+    .single();
+
+  if (error) {
+    console.error('Error toggling pin:', error);
+    return { data: null, error };
+  }
+
+  return { data, error: null };
 };

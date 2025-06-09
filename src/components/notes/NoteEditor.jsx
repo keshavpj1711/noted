@@ -1,27 +1,28 @@
 // src/components/notes/NoteEditor.jsx
 import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { fetchNoteById, updateNote, createNote } from '../../supabase/notes'; // <-- IMPORT Supabase functions
-import { useAuth } from '../../contexts/AuthContext'; // <-- IMPORT useAuth
+import { fetchNoteById, updateNote, createNote, deleteNote, togglePinNote } from '../../supabase/notes';
+import { useAuth } from '../../contexts/AuthContext';
 
 function NoteEditor({ noteId: propNoteId, isCreating = false }) {
   const params = useParams();
   const noteId = isCreating ? null : (propNoteId || params.noteId);
   const navigate = useNavigate();
-  const { user } = useAuth(); // <-- GET user from auth context
+  const { user } = useAuth();
 
   const [currentNote, setCurrentNote] = useState(null);
   const [isEditing, setIsEditing] = useState(isCreating);
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
-  const [loading, setLoading] = useState(true); // <-- ADD loading state
-  const [saving, setSaving] = useState(false); // <-- ADD saving state
-  const [error, setError] = useState(''); // <-- ADD error state
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [pinning, setPinning] = useState(false);
+  const [error, setError] = useState('');
 
   useEffect(() => {
     const loadNote = async () => {
       if (isCreating) {
-        // For creating a new note, fields start empty
         setTitle('');
         setContent('');
         setIsEditing(true);
@@ -35,7 +36,6 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
         return;
       }
 
-      // Fetch note from Supabase
       const { data, error } = await fetchNoteById(noteId);
       
       if (error) {
@@ -57,7 +57,6 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
 
   const handleEditToggle = () => {
     if (isEditing && !isCreating && currentNote) {
-      // If switching from Edit to Read for an existing note, reset changes
       setTitle(currentNote.title);
       setContent(currentNote.content);
     }
@@ -68,50 +67,79 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
     setSaving(true);
     setError('');
 
-    console.log('Saving note:', { title, content, isCreating }); // Debug log
-
     try {
       if (isCreating) {
         const { data, error } = await createNote(title, content);
-        console.log('Create result:', { data, error }); // Debug log
 
         if (error) {
           setError(`Failed to create note: ${error.message || error}`);
-          console.error('Create error:', error);
         } else if (data) {
-          console.log('Note created successfully:', data);
           navigate(`/user/note/${data.id}`);
         } else {
           setError('No data returned from create operation');
         }
       } else {
-        // Update existing note
         const { data, error } = await updateNote(noteId, title, content);
-        console.log('Update result:', { data, error }); // Debug log
 
         if (error) {
           setError(`Failed to save note: ${error.message || error}`);
-          console.error('Update error:', error);
         } else if (data) {
           setCurrentNote(data);
           setIsEditing(false);
-          console.log('Note updated successfully:', data);
         } else {
           setError('No data returned from update operation');
         }
       }
     } catch (err) {
-      console.error('Unexpected error:', err);
       setError(`An unexpected error occurred: ${err.message}`);
     }
     setSaving(false);
   };
 
-  const handleBack = () => {
-    navigate('/user'); // Go back to the notes list
+  const handleDelete = async () => {
+    if (!window.confirm('Are you sure you want to delete this note? This action cannot be undone.')) {
+      return;
+    }
+
+    setDeleting(true);
+    setError('');
+
+    try {
+      const { error } = await deleteNote(noteId);
+      
+      if (error) {
+        setError(`Failed to delete note: ${error.message || error}`);
+      } else {
+        navigate('/user'); // Redirect to notes list after successful deletion
+      }
+    } catch (err) {
+      setError(`An unexpected error occurred: ${err.message}`);
+    }
+    setDeleting(false);
   };
 
-  // Loading state
+  const handleTogglePin = async () => {
+    setPinning(true);
+    setError('');
+
+    try {
+      const { data, error } = await togglePinNote(noteId, currentNote.is_pinned);
+      
+      if (error) {
+        setError(`Failed to ${currentNote.is_pinned ? 'unpin' : 'pin'} note: ${error.message || error}`);
+      } else if (data) {
+        setCurrentNote(data);
+      }
+    } catch (err) {
+      setError(`An unexpected error occurred: ${err.message}`);
+    }
+    setPinning(false);
+  };
+
+  const handleBack = () => {
+    navigate('/user');
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-150px)] text-white text-2xl">
@@ -120,7 +148,6 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
     );
   }
 
-  // Error state (for existing notes)
   if (error && !isCreating) {
     return (
       <div className="flex items-center justify-center h-[calc(100vh-150px)] text-white text-2xl">
@@ -142,24 +169,73 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
       <div className="bg-green-900/20 rounded-xl shadow-2xl w-full max-w-[calc(100%-4rem)]
                       lg:max-w-4xl flex flex-col overflow-hidden border border-green-700/30 min-h-[70vh] max-h-[85vh]">
         
-        {/* Back Button - Top Left */}
+        {/* Top Action Bar: Back, Delete, Pin buttons */}
         <div className="p-5 pb-0">
-          <button
-            onClick={handleBack}
-            className="flex items-center space-x-2 px-3 py-2 rounded-md bg-green-800/30 text-green-300 
-                       hover:bg-green-700/40 hover:text-green-200 transition-colors text-sm border border-green-700/50"
-          >
-            <svg 
-              xmlns="http://www.w3.org/2000/svg" 
-              className="h-4 w-4" 
-              fill="none" 
-              viewBox="0 0 24 24" 
-              stroke="currentColor"
+          <div className="flex items-center justify-between">
+            {/* Left side: Back button */}
+            <button
+              onClick={handleBack}
+              className="flex items-center space-x-2 px-3 py-2 rounded-md bg-green-800/30 text-green-300 
+                         hover:bg-green-700/40 hover:text-green-200 transition-colors text-sm border border-green-700/50"
             >
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-            </svg>
-            <span>Back to Notes</span>
-          </button>
+              <svg 
+                xmlns="http://www.w3.org/2000/svg" 
+                className="h-4 w-4" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+              <span>Back to Notes</span>
+            </button>
+
+            {/* Right side: Delete and Pin buttons (only for existing notes) */}
+            {!isCreating && currentNote && (
+              <div className="flex items-center space-x-3">
+                {/* Pin/Unpin Button */}
+                <button
+                  onClick={handleTogglePin}
+                  disabled={pinning}
+                  className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm border transition-colors ${
+                    currentNote.is_pinned
+                      ? 'bg-yellow-600/30 text-yellow-300 border-yellow-600/50 hover:bg-yellow-500/40'
+                      : 'bg-gray-700/30 text-gray-300 border-gray-600/50 hover:bg-gray-600/40'
+                  } disabled:opacity-50`}
+                >
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="h-4 w-4" 
+                    fill={currentNote.is_pinned ? "currentColor" : "none"}
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                  </svg>
+                  <span>{pinning ? 'Processing...' : (currentNote.is_pinned ? 'Unpin' : 'Pin')}</span>
+                </button>
+
+                {/* Delete Button */}
+                <button
+                  onClick={handleDelete}
+                  disabled={deleting}
+                  className="flex items-center space-x-2 px-3 py-2 rounded-md bg-red-700/30 text-red-300 
+                           hover:bg-red-600/40 hover:text-red-200 transition-colors text-sm border border-red-600/50 disabled:opacity-50"
+                >
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="h-4 w-4" 
+                    fill="none" 
+                    viewBox="0 0 24 24" 
+                    stroke="currentColor"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  </svg>
+                  <span>{deleting ? 'Deleting...' : 'Delete'}</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
 
         {/* Error Message */}
@@ -182,13 +258,26 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
                 placeholder="Note Title"
               />
             ) : (
-              <h2 className="text-2xl md:text-3xl font-semibold text-white break-words">
-                {currentNote?.title || 'Untitled'}
-              </h2>
+              <div className="flex items-center space-x-3">
+                <h2 className="text-2xl md:text-3xl font-semibold text-white break-words">
+                  {currentNote?.title || 'Untitled'}
+                </h2>
+                {/* Pin indicator in title */}
+                {currentNote?.is_pinned && (
+                  <svg 
+                    xmlns="http://www.w3.org/2000/svg" 
+                    className="h-6 w-6 text-yellow-400" 
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
+                  </svg>
+                )}
+              </div>
             )}
           </div>
 
-          {/* Action Buttons */}
+          {/* Save/Edit Buttons */}
           <div className="flex-shrink-0 flex space-x-3">
             {isEditing ? (
               <>
