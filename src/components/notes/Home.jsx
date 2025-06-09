@@ -1,10 +1,43 @@
 // src/components/notes/Home.jsx
-import { Link } from 'react-router-dom'; // <--- IMPORT Link
+import { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import Card from "./Card";
-import { dummyNotes } from "../../data/notes";
+import { fetchUserNotes } from "../../supabase/notes";
+import { useAuth } from "../../contexts/AuthContext";
 
 function Home() {
-  const notes = dummyNotes;
+  const [notes, setNotes] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+  const { user } = useAuth();
+
+  // Fetch notes when component mounts or user changes
+  useEffect(() => {
+    const loadNotes = async () => {
+      if (!user) return;
+      
+      setLoading(true);
+      const { data, error } = await fetchUserNotes();
+      
+      if (error) {
+        setError('Failed to load notes');
+        console.error('Error loading notes:', error);
+      } else {
+        setNotes(data || []);
+      }
+      setLoading(false);
+    };
+
+    loadNotes();
+  }, [user]);
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[calc(100vh-200px)]">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-green-500"></div>
+      </div>
+    );
+  }
 
   return (
     <div className="px-4 sm:px-6 lg:px-8 py-8 min-h-[calc(100vh-80px)]">
@@ -32,6 +65,15 @@ function Home() {
         </div>
       </div>
 
+      {/* Error Message (if any) */}
+      {error && (
+        <div className="mb-6 max-w-3xl mx-auto">
+          <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-4 text-red-200">
+            {error}
+          </div>
+        </div>
+      )}
+
       {/* Notes Grid */}
       {notes && notes.length > 0 ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
@@ -41,7 +83,7 @@ function Home() {
               <Card
                 title={note.title}
                 content={note.content}
-                lastEditDate={note.lastEditDate}
+                lastEditDate={new Date(note.updated_at).toLocaleDateString('en-GB')}
               />
             </Link>
           ))}
