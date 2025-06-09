@@ -187,7 +187,7 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
               >
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
-              <span>Back to Notes</span>
+              {/* <span></span> */}
             </button>
 
             {/* Right side: Delete and Pin buttons (only for existing notes) */}
