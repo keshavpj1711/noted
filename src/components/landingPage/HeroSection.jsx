@@ -22,10 +22,14 @@ function HeroSection() {
         {/* Right: Text Content */}
         <div className="flex-1 flex flex-col items-center lg:items-start text-center lg:text-left">
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold text-white mb-6 leading-tight">
-            Hero Section
+            NOTED
           </h1>
+          <h3 className="text-2xl sm:text-2xl md:text-3xl font-bold text-white mb-6 leading-tight -my-2">
+            Every Great Idea, Starts with a Note!
+          </h3>
           <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 max-w-xl lg:max-w-2xl">
-            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+            Capture inspiration the moment it strikes.
+            Your ideas deserve a beautiful home.
           </p>
           <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
             <Link

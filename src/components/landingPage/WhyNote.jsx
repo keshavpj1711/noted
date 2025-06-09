@@ -9,7 +9,10 @@ function WhyNote() {
           Why Note Taking?
         </h1>
         <p className="text-base sm:text-lg md:text-xl text-gray-300 mb-8 max-w-xl lg:max-w-2xl">
-          Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s.
+          Our minds are incredible, but they're not perfect storage devices. 
+          Ideas come and go, important details fade, and brilliant thoughts slip away. 
+          Note-taking gives your mind the freedom to think creatively while ensuring nothing important gets lost. 
+          It's your external brain—always ready, never forgets.
         </p>
       </div>
 
