@@ -5,6 +5,7 @@ import Home from "./components/notes/Home";
 import NoteEditor from "./components/notes/NoteEditor";
 import CreateNotePage from "./components/notes/CreateNotePage";
 import AuthPage from "./components/auth/Auth"
+import ProtectedRoute from "./components/ProtectedRoute";
 
 const SettingsPage = () => (
   <div className="flex items-center justify-center h-[calc(100vh-80px)] text-white text-2xl">
@@ -47,11 +48,28 @@ function AppContent() {
         <main className="flex-grow">
           <Routes>
             <Route path="/" element={<HeroSection />} />
-            <Route path="/user" element={<Home />} />
-            <Route path="/user/note/:noteId" element={<NoteEditor />} />
-            <Route path="/create" element={<CreateNotePage />} />
-            <Route path="/settings" element={<SettingsPage />} />
             <Route path="/auth" element={<AuthPage />} />
+            {/* Protected routes */}
+            <Route path="/user" element={
+              <ProtectedRoute>
+                <Home />
+              </ProtectedRoute>
+            } />
+            <Route path="/user/note/:noteId" element={
+              <ProtectedRoute>
+                <NoteEditor />
+              </ProtectedRoute>
+            } />
+            <Route path="/create" element={
+              <ProtectedRoute>
+                <CreateNotePage />
+              </ProtectedRoute>
+            } />
+            <Route path="/settings" element={
+              <ProtectedRoute>
+                <SettingsPage />
+              </ProtectedRoute>
+            } />
           </Routes>
         </main>
       </div>
