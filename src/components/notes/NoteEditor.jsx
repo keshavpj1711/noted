@@ -107,7 +107,7 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
     setSaving(false);
   };
 
-  const handleCancelCreate = () => {
+  const handleBack = () => {
     navigate('/user'); // Go back to the notes list
   };
 
@@ -127,7 +127,7 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
         <div className="text-center">
           <p className="text-red-400 mb-4">{error}</p>
           <button
-            onClick={() => navigate('/user')}
+            onClick={handleBack}
             className="px-6 py-3 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors"
           >
             Back to Notes
@@ -142,9 +142,29 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
       <div className="bg-green-900/20 rounded-xl shadow-2xl w-full max-w-[calc(100%-4rem)]
                       lg:max-w-4xl flex flex-col overflow-hidden border border-green-700/30 min-h-[70vh] max-h-[85vh]">
         
+        {/* Back Button - Top Left */}
+        <div className="p-5 pb-0">
+          <button
+            onClick={handleBack}
+            className="flex items-center space-x-2 px-3 py-2 rounded-md bg-green-800/30 text-green-300 
+                       hover:bg-green-700/40 hover:text-green-200 transition-colors text-sm border border-green-700/50"
+          >
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              className="h-4 w-4" 
+              fill="none" 
+              viewBox="0 0 24 24" 
+              stroke="currentColor"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+            </svg>
+            <span>Back to Notes</span>
+          </button>
+        </div>
+
         {/* Error Message */}
         {error && (
-          <div className="mx-5 mt-5 bg-red-500/20 border border-red-500/50 rounded-lg p-3 text-red-200 text-sm">
+          <div className="mx-5 mt-3 bg-red-500/20 border border-red-500/50 rounded-lg p-3 text-red-200 text-sm">
             {error}
           </div>
         )}
@@ -180,7 +200,7 @@ function NoteEditor({ noteId: propNoteId, isCreating = false }) {
                   {saving ? 'Saving...' : (isCreating ? "Create" : "Save")}
                 </button>
                 <button
-                  onClick={isCreating ? handleCancelCreate : handleEditToggle}
+                  onClick={isCreating ? handleBack : handleEditToggle}
                   disabled={saving}
                   className="px-5 py-2 rounded-md bg-gray-600 text-white font-semibold hover:bg-gray-700 transition-colors text-sm disabled:opacity-50"
                 >
