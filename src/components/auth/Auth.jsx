@@ -86,7 +86,7 @@ function Auth() {
     <div
       className="min-h-screen flex items-center justify-center relative 
       overflow-hidden xl:bg-[length:45%_auto] lg:bg-[length:60%_auto] md:bg-[length:75%_auto] 
-      sm:bg-[length:95%_auto] bg-[length:130%_auto] bg-center bg-no-repeat"
+      sm:bg-[length:95%_auto] bg-[length:150%_auto] bg-center bg-no-repeat"
       style={{
         backgroundImage: `url(${bgVector})`,
       }}
